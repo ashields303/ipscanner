@@ -2,6 +2,8 @@ var express = require("express");
 const middleware = require("../middleware");
 var router = express.Router();
 const curl = require("../curl");
+const fuzzer = require("../fuzzer");
+const utils = require("../utils");
 const _ = require("lodash");
 /* GET users listing. */
 
@@ -12,6 +14,10 @@ router.get("/", async function (req, res, next) {
   // data = await curl.GetServer("167.17.227.57"); //IIS 7.0
   data = await curl.GetServer("137.184.76.65"); //IIS 7.0
   console.log(data);
+});
+
+router.get("/fuzz", async function (req, res, next) {
+  await fuzzer.ingestLists.getList();
 });
 
 router.post("/", async function (req, res, next) {
