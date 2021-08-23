@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # local testing recources
-resources/
+# resources/
