@@ -2,6 +2,8 @@ var path = require("path");
 let scanner = require("./scanner");
 let prompts = require("./prompts");
 
+let scanOptions = "!common.txt";
+
 async function main() {
   let signal = 0;
   while (signal != -1) {
@@ -10,11 +12,10 @@ async function main() {
     switch (mainPrompt.selection) {
       case "scan":
         let scanPrompt = await prompts.scanPrompt.prompt();
-        console.log(scanPrompt);
         if (scanPrompt.value !== "exit") {
           for (let i = 0; i < scanPrompt.value.length; i++) {
             const ip = scanPrompt.value[i];
-            let result = await scanner.scan(ip);
+            let result = await scanner.scan(ip, scanOptions);
             console.log(result);
           }
         }
@@ -24,7 +25,10 @@ async function main() {
         await prompts.helpPrompt.prompt();
         break;
       case "options":
-        console.log("options");
+        let optionsPrompt = await prompts.optionPrompt.prompt();
+        console.log(optionsPrompt);
+        //set the scan options
+        scanOptions = optionsPrompt.file;
         break;
       case "exit":
         console.log("Thanks");
@@ -33,9 +37,6 @@ async function main() {
         break;
     }
   }
-
-  //prompt again
-  //mainPrompt = await prompts.mainPrompt.prompt();
 }
 
 main();

@@ -1,23 +1,30 @@
 const curl = require("./curl");
 const fuzzer = require("./fuzzer");
 
-async function scan(ip) {
+async function scan(ip, wordlist) {
   let valid = [];
   let invalid = [];
 
-  //   console.log(ip);
   let server;
   try {
-    server = await curl.GetServer(ip);
+    let server;
+    try {
+      console.log(`SCANNING IP (${ip}) FOR SERVER VERSION`);
+      server = await curl.GetServer(ip);
+    } catch (error) {
+      console.error(error);
+    }
     // console.log(server);
 
     //if the server is nginx
     if (server.includes("nginx/1.2.")) {
+      console.log(`${ip} RUNNING MATCHING WEBSERVER (${server})`);
       let validServer = { ip: ip, server: server };
       //if the server has nginx/1.2.x check to see if it's fuzzable
+      console.log(`FUZZING FOR DIRECTORY TRAVERSAL`);
       let fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(
         ip,
-        "common.txt"
+        wordlist
       );
       if (fuzzable !== null) {
         validServer.directoryListing = true;
@@ -28,11 +35,13 @@ async function scan(ip) {
 
       //if the server is IIS
     } else if (server.includes("Microsoft-IIS/7.0")) {
+      console.log(`${ip} RUNNING MATCHING WEBSERVER (${server})`);
       let validServer = { ip: ip, server: server };
       //if the server has nginx/1.2.x check to see if it's fuzzable
+      console.log(`FUZZING FOR DIRECTORY TRAVERSAL`);
       let fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(
         ip,
-        "common.txt"
+        wordlist
       );
       if (fuzzable !== null) {
         validServer.directoryListing = true;
@@ -45,10 +54,12 @@ async function scan(ip) {
     } else {
       return {
         ip: ip,
+        server: server,
         reason: "Server value did not match whitelisted servers",
       };
     }
   } catch (error) {
+    console.log(error);
     console.log(`ERROR: ${server.message}`);
     return { ip: ip, reason: server.message };
   }
