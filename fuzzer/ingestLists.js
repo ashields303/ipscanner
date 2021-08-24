@@ -13,7 +13,7 @@ async function getLists() {
 async function getWordlist(file) {
   let listsDir = path.join(path.dirname(__dirname), `resources`, `lists`);
   let list = await Files.readFile(listsDir, file);
-  console.log(list);
+  return list;
 }
 
 module.exports = {

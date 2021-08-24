@@ -1,9 +1,44 @@
-var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
 let scanner = require("./scanner");
+let prompts = require("./prompts");
 
+async function main() {
+  let signal = 0;
+  while (signal != -1) {
+    let mainPrompt = await prompts.mainPrompt.prompt();
+    // start the loop while the main prompt isn't the exit option
+    switch (mainPrompt.selection) {
+      case "scan":
+        let scanPrompt = await prompts.scanPrompt.prompt();
+        console.log(scanPrompt);
+        if (scanPrompt.value !== "exit") {
+          for (let i = 0; i < scanPrompt.value.length; i++) {
+            const ip = scanPrompt.value[i];
+            let result = await scanner.scan(ip);
+            console.log(result);
+          }
+        }
+
+        break;
+      case "help":
+        await prompts.helpPrompt.prompt();
+        break;
+      case "options":
+        console.log("options");
+        break;
+      case "exit":
+        console.log("Thanks");
+        process.exit(0);
+      default:
+        break;
+    }
+  }
+
+  //prompt again
+  //mainPrompt = await prompts.mainPrompt.prompt();
+}
+
+main();
 // async function init() {
 //   let ips = [
 //     "137.184.76.65",
@@ -22,19 +57,3 @@ let scanner = require("./scanner");
 // }
 
 // init();
-
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var scannersRouter = require("./routes/scanner");
-
-var app = express();
-
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/scanner", scannersRouter);
-
-module.exports = app;

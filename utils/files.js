@@ -12,7 +12,7 @@ async function getFolderFiles(dirname) {
 }
 
 async function readFile(path) {
-  return fs.readFileSync(path, "utf-8", function (err, content) {
+  return fs.readFileSync(file, "utf-8", function (err, content) {
     if (err) {
       console.log(err);
       throw err;
