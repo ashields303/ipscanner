@@ -1,3 +1,7 @@
-const Curl = require("./curlParser");
+const curlParser = require("./curlParser");
+const listParser = require("./listParser");
 
-module.exports = Curl;
+module.exports = {
+  curlParser,
+  listParser,
+};

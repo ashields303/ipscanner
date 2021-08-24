@@ -1,3 +1,3 @@
-const Files = require("./files");
+const fileUtils = require("./files");
 
-module.exports = Files;
+module.exports = fileUtils;

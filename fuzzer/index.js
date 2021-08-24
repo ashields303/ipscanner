@@ -1,5 +1,5 @@
-const ingestLists = require("./ingestLists");
+const nginxFuzzer = require("./nginxFuzzer");
 
 module.exports = {
-  ingestLists,
+  nginxFuzzer,
 };

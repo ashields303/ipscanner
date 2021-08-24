@@ -11,10 +11,8 @@ async function getFolderFiles(dirname) {
   });
 }
 
-async function readFile(directory, filename) {
-  let file = `${directory}/${filename}`;
-  console.log(file);
-  return fs.readFileSync(file, "utf-8", function (err, content) {
+async function readFile(path) {
+  return fs.readFileSync(path, "utf-8", function (err, content) {
     if (err) {
       console.log(err);
       throw err;
@@ -25,6 +23,6 @@ async function readFile(directory, filename) {
 }
 
 module.exports = {
-    getFolderFiles,
-    readFile,
+  getFolderFiles,
+  readFile,
 };

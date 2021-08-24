@@ -1,10 +1,9 @@
 var express = require("express");
-const middleware = require("../middleware");
 var router = express.Router();
 const curl = require("../curl");
 const fuzzer = require("../fuzzer");
-const utils = require("../utils");
-const _ = require("lodash");
+const path = require("path");
+const parser = require("../parser");
 /* GET users listing. */
 
 router.get("/", async function (req, res, next) {
@@ -17,7 +16,20 @@ router.get("/", async function (req, res, next) {
 });
 
 router.get("/fuzz", async function (req, res, next) {
-  await fuzzer.ingestLists.getList();
+  let appDir = path.dirname(require.main.filename);
+  let fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(
+    "54.235.195.168",
+    "common.txt"
+  );
+
+  if (fuzzable !== null) {
+    res.json({ ip: `fuzzalbe at: ${fuzzable}` });
+  } else {
+    res.json({ ip: `not fuzzable` });
+  }
+  //   await fuzzer.ingestLists.getLists();
+  //   let list = fuzzer.ingestLists.getWordlist("directory-list-2.3-smallest.txt");
+  //   console.log(list);
 });
 
 router.post("/", async function (req, res, next) {
@@ -32,11 +44,32 @@ router.post("/", async function (req, res, next) {
     try {
       server = await curl.GetServer(ip);
       console.log(server);
-      if (
-        server.includes("nginx/1.2.") ||
-        server.includes("Microsoft-IIS/7.0")
-      ) {
+
+      if (server.includes("nginx/1.2.")) {
         let validServer = { ip: ip, server: server };
+        //if the server has nginx/1.2.x check to see if it's fuzzable
+        let fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(
+          ip,
+          "common.txt"
+        );
+        if (fuzzable !== null) {
+          validServer.directoryListing = true;
+        } else {
+          validServer.directoryListing = false;
+        }
+        valid.push(validServer);
+      } else if (server.includes("Microsoft-IIS/7.0")) {
+        let validServer = { ip: ip, server: server };
+        //if the server has nginx/1.2.x check to see if it's fuzzable
+        let fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(
+          ip,
+          "common.txt"
+        );
+        if (fuzzable !== null) {
+          validServer.directoryListing = true;
+        } else {
+          validServer.directoryListing = false;
+        }
         valid.push(validServer);
       } else {
         invalid.push({

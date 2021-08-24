@@ -1,4 +1,4 @@
-const { Curl } = require("node-libcurl");
+const path = require("path");
 const { curly } = require("node-libcurl");
 const parser = require("../parser");
 
@@ -6,7 +6,7 @@ async function GetServer(ip) {
   let curlResponse;
   let server;
   //set up head request using curly
-  console.log(typeof ip);
+  //   console.log(typeof ip);
   try {
     curlResponse = await curly.head(ip, { HEADER: true, FOLLOWLOCATION: true });
   } catch (error) {
@@ -17,7 +17,7 @@ async function GetServer(ip) {
   }
 
   try {
-    server = await parser.ParseServerHeaders(curlResponse.headers);
+    server = await parser.curlParser.ParseServerHeaders(curlResponse.headers);
     if (server !== null) {
       return server;
     } else {
@@ -34,6 +34,22 @@ async function GetServer(ip) {
   }
 }
 
+async function TestDirectory(ip, dir) {
+  let uri = `${ip}/${dir}/`;
+  //   console.log(`testing ${uri}`);
+  let curlResponse;
+  try {
+    curlResponse = await curly.get(uri);
+  } catch (error) {
+    return {
+      status: 500,
+      message: `Curl response failed with error: ${error}`,
+    };
+  }
+  return curlResponse;
+}
+
 module.exports = {
   GetServer,
+  TestDirectory,
 };

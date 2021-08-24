@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const htmlParser = require("node-html-parser");
 
 async function ParseServerHeaders(headers) {
   //check to see if headers are not empty
@@ -18,6 +19,12 @@ async function ParseServerHeaders(headers) {
   }
 }
 
+async function ParseHTMLTitle(content) {
+  const root = htmlParser.parse(content);
+  return root.querySelector("title").textContent;
+}
+
 module.exports = {
   ParseServerHeaders,
+  ParseHTMLTitle,
 };
