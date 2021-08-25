@@ -1,7 +1,7 @@
-const inquirer = require("inquirer");
+// const inquirer = require("inquirer");
 const _ = require("lodash");
 
-async function prompt() {
+async function prompt(inquirer) {
   const options = ["scan", "help", "options", "exit"];
   const questions = [
     {

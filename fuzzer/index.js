@@ -1,5 +1,5 @@
-const nginxFuzzer = require("./nginxFuzzer");
+const htmlFuzzer = require("./fuzzer");
 
 module.exports = {
-  nginxFuzzer,
+  htmlFuzzer,
 };

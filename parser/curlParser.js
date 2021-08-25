@@ -19,12 +19,18 @@ async function ParseServerHeaders(headers) {
   }
 }
 
-async function ParseHTMLTitle(content) {
+async function nginxParseHTML(content) {
   const root = htmlParser.parse(content);
   return root.querySelector("title").textContent;
 }
 
+async function iisParseHTML(content) {
+  const root = htmlParser.parse(content);
+  return root.querySelector("pre a").textContent;
+}
+
 module.exports = {
   ParseServerHeaders,
-  ParseHTMLTitle,
+  nginxParseHTML,
+  iisParseHTML,
 };

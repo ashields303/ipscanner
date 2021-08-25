@@ -19,17 +19,20 @@ async function GetServer(ip) {
   try {
     server = await parser.curlParser.ParseServerHeaders(curlResponse.headers);
     if (server !== null) {
-      return server;
+      return {
+        status: 200,
+        server: server,
+      };
     } else {
       return {
         status: 404,
-        message: `ParseServerHeaders could not find a server type`,
+        message: `server type not detectible`,
       };
     }
   } catch (error) {
     return {
       status: 500,
-      message: `ParseServerHeaders failed with error: ${error}`,
+      message: error,
     };
   }
 }

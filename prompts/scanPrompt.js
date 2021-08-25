@@ -2,7 +2,7 @@ const inquirer = require("inquirer");
 const isIp = require("is-ip");
 const _ = require("lodash");
 
-async function prompt() {
+async function prompt(inquirer) {
   const questions = [
     {
       type: "input",
@@ -14,11 +14,12 @@ async function prompt() {
           return true;
         } else {
           let ips = _.map(_.split(value, ","), (ip) => {
-            return _.trim(ip, "\"'`");
+            return _.trim(ip, "\"'` ");
           });
           for (let i = 0; i < ips.length; i++) {
             const ip = ips[i];
             if (!isIp(ip)) {
+              value = "";
               return `ip (${ip}) is not a valid ip, please try again`;
             }
           }
@@ -38,8 +39,15 @@ async function prompt() {
           return "exit";
         } else {
           let ips = _.map(_.split(answer, ","), (ip) => {
-            return _.trim(ip, "\"'`");
+            return _.trim(ip, "\"'` ");
           });
+          for (let i = 0; i < ips.length; i++) {
+            const ip = ips[i];
+            if (!isIp(ip)) {
+              console.log(`${ip}`);
+              return ip;
+            }
+          }
           return ips;
         }
       },

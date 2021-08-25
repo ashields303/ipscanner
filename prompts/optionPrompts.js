@@ -1,11 +1,11 @@
-const inquirer = require("inquirer");
+// const inquirer = require("inquirer");
 const _ = require("lodash");
 const path = require("path");
-const fileUtils = require("../utils");
+const utils = require("../utils");
 
-async function prompt() {
+async function prompt(inquirer) {
   let listsDir = path.join(path.dirname(__dirname), `resources`, `lists`);
-  const options = await fileUtils.getFolderFiles(listsDir);
+  const options = await utils.fileUtils.getFolderFiles(listsDir);
   // const options = ["scan", "help", "options", "exit"];
   const questions = [
     {
