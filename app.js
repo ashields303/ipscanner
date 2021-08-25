@@ -1,9 +1,7 @@
-var path = require("path");
 let scanner = require("./scanner");
 const inquirer = require("inquirer");
 let prompts = require("./prompts");
 let utils = require("./utils");
-const { clearScreenDown } = require("readline");
 
 // let scanOptions = "!common.txt";
 let scanOptions = "directory-list-2.3-smallest.txt";

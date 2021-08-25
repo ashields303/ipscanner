@@ -1,6 +1,7 @@
 const path = require("path");
 const { curly } = require("node-libcurl");
 const parser = require("../parser");
+const _ = require("lodash");
 
 async function GetServer(ip) {
   let curlResponse;
@@ -19,10 +20,17 @@ async function GetServer(ip) {
   try {
     server = await parser.curlParser.ParseServerHeaders(curlResponse.headers);
     if (server !== null) {
-      return {
-        status: 200,
-        server: server,
-      };
+      if (_.split(server, ",").length > 1) {
+        return {
+          status: 200,
+          server: "honeypot",
+        };
+      } else {
+        return {
+          status: 200,
+          server: server,
+        };
+      }
     } else {
       return {
         status: 404,
