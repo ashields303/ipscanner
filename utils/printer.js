@@ -3,7 +3,6 @@ const _ = require("lodash");
 const { Table } = require("console-table-printer");
 
 async function printScanResults(scanResults) {
-  let results;
   const valid = new Table();
   const invalid = new Table();
   if (_.isEmpty(scanResults.valid) && _.isEmpty(scanResults.invalid)) {
@@ -15,6 +14,7 @@ async function printScanResults(scanResults) {
         valid.addRow(scan);
       });
       valid.printTable();
+      console.log("\n");
     }
     if (!_.isEmpty(scanResults.invalid)) {
       console.log(chalk.red("Invalid Scan Results:\n"));

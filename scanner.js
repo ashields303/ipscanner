@@ -1,10 +1,11 @@
 const curl = require("./curl");
 const fuzzer = require("./fuzzer");
+const chalk = require("chalk");
 
 async function scan(ip, wordlist) {
   let server;
   try {
-    console.log(`SCANNING IP (${ip}) FOR SERVER VERSION`);
+    console.log(`${chalk.blue(ip)} being scanned for server version`);
     server = await curl.GetServer(ip);
   } catch (error) {
     console.error(error);
@@ -22,20 +23,34 @@ async function scan(ip, wordlist) {
 
     // server is valid, scan for directory traversal
     if (serverType !== "other") {
-      console.log(`${ip} RUNNING MATCHING WEBSERVER (${server.server})`);
+      console.log(
+        `${chalk.blue(ip)} running matched server: ${chalk.green(
+          server.server
+        )}`
+      );
       let traversable;
       try {
         console.log(
-          `FUZZING FOR DIRECTORY TRAVERSAL USING WORDLIST [${wordlist}]`
+          `${chalk.blue(
+            ip
+          )} being fuzzed for directory with simple scan using: ${chalk.magenta(
+            wordlist
+          )}`
         );
         traversable = await checkDirectoryTraversal(ip, wordlist, serverType);
 
         if (traversable) {
           console.log(
-            `DIRECTORY LISTING WAS DISCOVERED ON ${ip} USING [${wordlist}]`
+            `${chalk.blue(ip)} directory listing status: ${chalk.green(
+              "detected"
+            )}`
           );
         } else {
-          console.log(`${ip} WAS NOT FUZZABLE USING [${wordlist}]`);
+          console.log(
+            `${chalk.blue(ip)} directory listing status: ${chalk.red(
+              "not detected"
+            )}`
+          );
         }
         return {
           valid: true,
@@ -47,6 +62,11 @@ async function scan(ip, wordlist) {
         console.error(error);
       }
     } else {
+      console.log(
+        `${chalk.blue(ip)} running on non whitelisted server ${chalk.magenta(
+          server.server
+        )}`
+      );
       return {
         valid: false,
         ip: ip,
@@ -55,6 +75,11 @@ async function scan(ip, wordlist) {
       };
     }
   } else {
+    console.log(
+      `${chalk.blue(ip)} server could not be determined: ${chalk.magenta(
+        server.message
+      )}`
+    );
     return {
       valid: false,
       ip: ip,

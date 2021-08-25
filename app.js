@@ -23,13 +23,14 @@ async function main() {
           for (let i = 0; i < scanPrompt.value.length; i++) {
             const ip = scanPrompt.value[i];
             let result = await scanner.scan(ip, scanOptions);
+            console.log("\n");
             if (result.valid) {
               scanResults.valid.push(result);
             } else {
               scanResults.invalid.push(result);
             }
           }
-          console.log("\n");
+          console.log("------ Scan Results ------");
         }
         utils.printer.printScanResults(scanResults);
         await resetScanResults();
