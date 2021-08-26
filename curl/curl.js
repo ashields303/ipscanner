@@ -18,6 +18,7 @@ async function GetServer(ip) {
     return {
       status: 500,
       message: `Curl response failed with error: ${error}`,
+      server: null,
     };
   }
 
@@ -27,11 +28,13 @@ async function GetServer(ip) {
       if (_.split(server, ",").length > 1) {
         return {
           status: 200,
+          message: null,
           server: "honeypot",
         };
       } else {
         return {
           status: 200,
+          message: null,
           server: server,
         };
       }
@@ -39,12 +42,14 @@ async function GetServer(ip) {
       return {
         status: 404,
         message: `server type not detectible`,
+        server: null,
       };
     }
   } catch (error) {
     return {
       status: 500,
       message: error,
+      server: null,
     };
   }
 }

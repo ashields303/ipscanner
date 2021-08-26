@@ -59,10 +59,11 @@ async function scan(ip, wordlist) {
           );
         }
         return {
-          valid: true,
           ip: ip,
+          valid: true,
           server: server.server,
           directoryListing: traversable,
+          reason: null,
         };
       } catch (error) {
         console.error(error);
@@ -74,9 +75,10 @@ async function scan(ip, wordlist) {
         )}`
       );
       return {
-        valid: false,
         ip: ip,
+        valid: false,
         server: server.server,
+        directoryListing: null,
         reason: "Unmatched server whitelist",
       };
     }
@@ -87,9 +89,10 @@ async function scan(ip, wordlist) {
       )}`
     );
     return {
-      valid: false,
       ip: ip,
+      valid: false,
       server: "unknown",
+      directoryListing: null,
       reason: server.message,
     };
   }
@@ -101,10 +104,10 @@ async function scan(ip, wordlist) {
  * @returns string: 'nginx' if server name matches 'nginx/1.2.', 'iis' if server name matches 'Microsoft-IIS/7.0'
  */
 async function checkServerType(server) {
-  if (server.includes("nginx/1.2.")) {
+  if (server.includes(process.env.NGINX_VERSION)) {
     return "nginx";
   }
-  if (server.includes("Microsoft-IIS/7.0")) {
+  if (server.includes(process.env.IIS_VERSION)) {
     return "iis";
   }
   return "other";

@@ -4,7 +4,7 @@ const inquirer = require("inquirer");
  * @returns JSON: response from which selection was made from the inquirer command prompt
  */
 async function prompt() {
-  const options = ["scan", "help", "options", "exit"];
+  const options = ["scan", "help", "exit"];
   const questions = [
     {
       type: "list",
