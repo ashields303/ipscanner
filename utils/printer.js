@@ -1,7 +1,10 @@
 const chalk = require("chalk");
 const _ = require("lodash");
 const { Table } = require("console-table-printer");
-
+/**
+ * Takes in the valid and invalid responses from the scan tool and pretty prints them out into a nicely formated table
+ * @param {JSON} scanResults JSON object with arrays from the scanners results
+ */
 async function printScanResults(scanResults) {
   const valid = new Table();
   const invalid = new Table();

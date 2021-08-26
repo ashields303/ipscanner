@@ -1,7 +1,9 @@
-// const inquirer = require("inquirer");
-const _ = require("lodash");
-
-async function prompt(inquirer) {
+const inquirer = require("inquirer");
+/**
+ * Prompts the user to select one of the main options for the tool.
+ * @returns JSON: response from which selection was made from the inquirer command prompt
+ */
+async function prompt() {
   const options = ["scan", "help", "options", "exit"];
   const questions = [
     {

@@ -1,8 +1,12 @@
-const path = require("path");
 const { curly } = require("node-libcurl");
 const parser = require("../parser");
 const _ = require("lodash");
 
+/**
+ * Attempts to use the cURL module to get a server version.
+ * @param {string} ip ip address
+ * @returns JSON object with {status, message} for ip addresses that return !200, {status, server} for ips that return a valid server value
+ */
 async function GetServer(ip) {
   let curlResponse;
   let server;
@@ -45,6 +49,12 @@ async function GetServer(ip) {
   }
 }
 
+/**
+ * Uses cURL to attempt to hit an ip endpoint and return the HTML upon success, ie: 192.168.1.0/images/
+ * @param {string} ip base ip address to use
+ * @param {string} dir endpoint (directory) on the site to ping
+ * @returns returns the cURL response on success, returns JSON {status, message} on error for handling
+ */
 async function TestDirectory(ip, dir) {
   let uri = `${ip}/${dir}/`;
   //   console.log(`testing ${uri}`);

@@ -2,7 +2,11 @@ const inquirer = require("inquirer");
 const isIp = require("is-ip");
 const _ = require("lodash");
 
-async function prompt(inquirer) {
+/**
+ * Prompts the user to enter a csv list of ip(v4) addresses to scan for
+ * @returns JSON: returns sanitized array of ip address to be used for scanning
+ */
+async function prompt() {
   const questions = [
     {
       type: "input",
@@ -25,14 +29,6 @@ async function prompt(inquirer) {
           }
           return true;
         }
-
-        // ips.forEach((ip) => {
-        //   console.log(ip);
-        //   if (!isIp(ip)) {
-        //     return `ip (${ip}) is not a valid ip, please try again`;
-        //   }
-        // });
-        // return true;
       },
       filter: (answer) => {
         if (_.lowerCase(answer).includes("exit")) {
@@ -53,21 +49,6 @@ async function prompt(inquirer) {
       },
     },
   ];
-
-  //   {
-  //     type: 'input',
-  //     name: 'phone',
-  //     message: "What's your phone number",
-  //     validate(value) {
-  //       const pass = value.match(
-  //         /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i
-  //       );
-  //       if (pass) {
-  //         return true;
-  //       }
-
-  //       return 'Please enter a valid phone number';
-  //     },
 
   let answer = await inquirer.prompt(questions);
   return answer;

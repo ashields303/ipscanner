@@ -1,9 +1,13 @@
-// const inquirer = require("inquirer");
+const inquirer = require("inquirer");
 const _ = require("lodash");
 const path = require("path");
 const utils = require("../utils");
 
-async function prompt(inquirer) {
+/**
+ * Prompts the user to select from one of the wordlist files in the /resources/lists directory to use for scanning for Directory Traversal
+ * @returns JSON: returns the options with the wordlist file to use when parsing
+ */
+async function prompt() {
   let listsDir = path.join(path.dirname(__dirname), `resources`, `lists`);
   const options = await utils.fileUtils.getFolderFiles(listsDir);
   // const options = ["scan", "help", "options", "exit"];

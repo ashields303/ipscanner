@@ -1,7 +1,10 @@
-//Runs the validator
 var fs = require("fs");
-let path = require("path");
 
+/**
+ * Gets an array of all the files for a given directory on the file system
+ * @param {string} path directory path to read from
+ * @returns Array: an array of filenames for a given directory
+ */
 async function getFolderFiles(path) {
   let fileNames;
   try {
@@ -12,6 +15,11 @@ async function getFolderFiles(path) {
   return fileNames;
 }
 
+/**
+ * Gets the contents of a given file on the file system
+ * @param {string} path directory path of a file to read
+ * @returns string: contents of a file
+ */
 async function readFile(path) {
   try {
     const data = fs.readFileSync(path, "utf8");
@@ -21,6 +29,7 @@ async function readFile(path) {
   }
 }
 
+/* not currently used
 async function writeToFile(path, data) {
   let rawFileData = await readFile(directory, filename);
   let fileData = JSON.parse(rawFileData);
@@ -38,6 +47,7 @@ async function writeToFile(path, data) {
     }
   }
 }
+*/
 
 module.exports = {
   getFolderFiles,

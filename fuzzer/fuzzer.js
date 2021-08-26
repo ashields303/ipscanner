@@ -4,8 +4,14 @@ const fs = require("fs");
 const readline = require("readline");
 const parser = require("../parser");
 const utils = require("../utils");
-const _ = require("lodash");
 
+/**
+ * Uses a wordlist, ip address, and sever type attempt to discover the Directory Traversal vuln
+ * @param {string} address ip address to use for checking for Directory Traversal vuln
+ * @param {string} list the wordlist file to use for testing endpoints with
+ * @param {string} type the server type (nginx,iis)
+ * @returns boolean: true if directory traversal was detected, false if not detected
+ */
 async function hasDirectoryTraversal(address, list, type) {
   let wordList = [];
   wordList = await populateWordlist(list, wordList);
@@ -31,6 +37,12 @@ async function hasDirectoryTraversal(address, list, type) {
   return false;
 }
 
+/**
+ * Attempts to parse out the title information from the HTML cURL response for the specific server version to determine if the Directory Traversal vuln is present
+ * @param {string} html HTML to check for specific title information
+ * @param {string} type server type (nginx,iis)
+ * @returns boolean: true if the HTML contains value that would determine that Directory Traversal is present, false if not
+ */
 async function tryParseTitle(html, type) {
   if (type === "nginx") {
     // if nginx, try parsing the title out
@@ -56,6 +68,12 @@ async function tryParseTitle(html, type) {
   return false;
 }
 
+/**
+ * Reads the text file for a given word list, and populates the wordlist array passed by reference
+ * @param {string} listName filename of the wordlist to use
+ * @param {Array} wordList array to use for populating individual words for checking
+ * @returns Array of individual words that are parsed out from the wordlist file
+ */
 async function populateWordlist(listName, wordList) {
   let listsDir = path.join(path.dirname(__dirname), `resources`, `lists`);
   const rl = readline.createInterface({

@@ -2,6 +2,12 @@ const curl = require("./curl");
 const fuzzer = require("./fuzzer");
 const chalk = require("chalk");
 
+/**
+ * Performs scan of an individual ip address to check for IIS7 or nginx 1.2.x servers. If servers are found with those versions, a Directory Traversal scan is performed using a wordlist of directories to attempt to fuzz
+ * @param {string} ip ip address to use for scanning
+ * @param {string} wordlist file name of the wordlist to use for Directory Traversal scan
+ * @returns JSON: returns results from a scan of the ip address.
+ */
 async function scan(ip, wordlist) {
   let server;
   try {
@@ -89,8 +95,13 @@ async function scan(ip, wordlist) {
   }
 }
 
+/**
+ * Checks the server from a cURL HEAD response to determine if the server is of type 'nginx' or 'iis' based on the targeted versions
+ * @param {string} server server name from a cURL HEAD response
+ * @returns string: 'nginx' if server name matches 'nginx/1.2.', 'iis' if server name matches 'Microsoft-IIS/7.0'
+ */
 async function checkServerType(server) {
-  if (server.includes("nginx/1.2.") || server.includes("nginx/1.18.")) {
+  if (server.includes("nginx/1.2.")) {
     return "nginx";
   }
   if (server.includes("Microsoft-IIS/7.0")) {
@@ -99,6 +110,13 @@ async function checkServerType(server) {
   return "other";
 }
 
+/**
+ * Performs scan of an ip address using a wordlist and server type to check for the existance of Directory Traversal
+ * @param {string} ip ip address to fuzz
+ * @param {array} wordlist array of directories to scan
+ * @param {string} type server type 'iis' or 'nginx'
+ * @returns boolean: true if directory traversal was detected, false if not
+ */
 async function checkDirectoryTraversal(ip, wordlist, type) {
   let fuzzable;
   try {
@@ -111,20 +129,6 @@ async function checkDirectoryTraversal(ip, wordlist, type) {
   } catch (error) {
     console.error(error);
   }
-  //   if (type === "nginx") {
-  //   } else {
-  //     try {
-  //       //SWAP THIS WITH THE OTHER FUZZER
-  //       fuzzable = await fuzzer.nginxFuzzer.hasDirectoryTraversal(ip, wordlist);
-  //       if (fuzzable !== null) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
 }
 
 module.exports = {
