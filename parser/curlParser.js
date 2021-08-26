@@ -41,7 +41,7 @@ async function nginxParseHTML(content) {
  */
 async function iisParseHTML(content) {
   const root = htmlParser.parse(content);
-  return root.querySelector("pre a").textContent;
+  return root.querySelector("pre").textContent;
 }
 
 module.exports = {
